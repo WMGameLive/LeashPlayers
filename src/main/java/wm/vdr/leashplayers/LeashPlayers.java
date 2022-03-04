@@ -12,8 +12,8 @@ public final class LeashPlayers extends JavaPlugin {
         saveDefaultConfig();
 
         getServer().getPluginManager().registerEvents(new Listeners(), this);
-        getCommand("leashplayer").setExecutor(new Executors());
-        getCommand("leashplayer").setTabCompleter(new Executors());
+        getCommand("leashplayers").setExecutor(new Executors());
+        getCommand("leashplayers").setTabCompleter(new Executors());
     }
 
     @Override
