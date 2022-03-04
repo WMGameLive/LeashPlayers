@@ -1,0 +1,18 @@
+name: LeashPlayers
+version: '${project.version}'
+main: wm.vdr.leashplayers.LeashPlayers
+api-version: 1.16
+authors: [ WMGameLive ]
+description: Allow to use lead on players!
+commands:
+  leashplayers:
+    description: main command.
+    usage: /<command> reload
+    permission: leashplayers.admin
+permissions:
+  leashplayers.admin:
+    description: admin permission.
+    default: op
+  leashplayers.use:
+    description: allow leash other player.
+    default: op
