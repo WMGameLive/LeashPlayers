@@ -1,5 +1,6 @@
 # LeashPlayers
 A simple plugin that allow you to use lead on players! Just like normal mobs.
+Download on [Spigot](https://www.spigotmc.org/resources/1-16-1-18-2-leashplayers.100458/).
 
 
 ## Command
