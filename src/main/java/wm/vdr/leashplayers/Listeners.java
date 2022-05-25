@@ -1,7 +1,9 @@
 package wm.vdr.leashplayers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -9,8 +11,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityUnleashEvent;
+import org.bukkit.event.entity.EntityUnleashEvent.UnleashReason;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerUnleashEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -26,6 +31,13 @@ public class Listeners implements Listener {
 
     List<Player> leashed = new ArrayList<>();
     List<LivingEntity> entityList = new ArrayList<>();
+    List<Entity> distanceUnleash = new ArrayList<>();
+
+    @EventHandler
+    public void onUnleash(EntityUnleashEvent e) {
+        if(e.getReason() == UnleashReason.PLAYER_UNLEASH) return;
+        distanceUnleash.add(e.getEntity());
+    }
 
     @EventHandler
     public void onLeash(PlayerInteractAtEntityEvent e) {
@@ -68,7 +80,10 @@ public class Listeners implements Listener {
                     entityList.remove(entity);
                     entity.remove();
                     target.setAllowFlight(false);
-                    target.getWorld().dropItemNaturally(target.getLocation(), new ItemStack(Material.LEAD));
+                    if(!distanceUnleash.contains(entity))
+                        target.getWorld().dropItemNaturally(target.getLocation(), new ItemStack(Material.LEAD));
+                    else
+                        distanceUnleash.remove(entity);
                     cancel();
                 }
                 Location location = target.getLocation();
