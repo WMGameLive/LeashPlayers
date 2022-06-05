@@ -1,6 +1,5 @@
 package wm.vdr.leashplayers;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -15,7 +14,6 @@ import org.bukkit.event.entity.EntityUnleashEvent;
 import org.bukkit.event.entity.EntityUnleashEvent.UnleashReason;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.player.PlayerUnleashEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -48,7 +46,7 @@ public class Listeners implements Listener {
         Player player = e.getPlayer();
         Player target = (Player) e.getRightClicked();
 
-        if(!player.hasPermission("leashplayer.use")) return;
+        if(!player.hasPermission("leashplayers.use")) return;
 
         if(leashed.contains(target)) {
             leashed.remove(target);
