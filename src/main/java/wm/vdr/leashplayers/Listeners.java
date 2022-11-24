@@ -56,6 +56,7 @@ public class Listeners implements Listener {
 
         if(!player.getInventory().getItemInMainHand().getType().equals(Material.LEAD)) return;
 
+        // a brain-dead person said this is slime and give me a false review, lol.
         LivingEntity entity = (LivingEntity) target.getWorld().spawnEntity(target.getLocation(), EntityType.ZOMBIE);
         entity.setSilent(true);
         entity.setInvisible(true);
