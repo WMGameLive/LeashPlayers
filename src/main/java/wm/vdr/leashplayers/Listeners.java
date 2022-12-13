@@ -71,7 +71,6 @@ public class Listeners implements Listener {
             zombie.setLeashHolder(player);
         });
 
-
         target.setAllowFlight(true);
         leashed.add(target);
         entityList.add(entity);
