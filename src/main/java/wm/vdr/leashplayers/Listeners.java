@@ -2,10 +2,7 @@ package wm.vdr.leashplayers;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustEvent;
@@ -56,13 +53,24 @@ public class Listeners implements Listener {
 
         if(!player.getInventory().getItemInMainHand().getType().equals(Material.LEAD)) return;
 
-        LivingEntity entity = (LivingEntity) target.getWorld().spawnEntity(target.getLocation(), EntityType.ZOMBIE);
-        entity.setSilent(true);
-        entity.setInvisible(true);
-        entity.setCollidable(false);
-        entity.setInvulnerable(true);
-        entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255, false, false));
-        entity.setLeashHolder(player);
+        LivingEntity entity = target.getWorld().spawn(target.getLocation(), Zombie.class, zombie -> {
+            zombie.getEquipment().setItemInMainHand(null);
+            zombie.getEquipment().setHelmet(null);
+            zombie.getEquipment().setChestplate(null);
+            zombie.getEquipment().setLeggings(null);
+            zombie.getEquipment().setBoots(null);
+            zombie.setCanPickupItems(false);
+            zombie.setAdult();
+            if(zombie.getVehicle() != null)
+                zombie.getVehicle().remove();
+            zombie.setSilent(true);
+            zombie.setInvisible(true);
+            zombie.setCollidable(false);
+            zombie.setInvulnerable(true);
+            zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255, false, false));
+            zombie.setLeashHolder(player);
+        });
+
 
         target.setAllowFlight(true);
         leashed.add(target);
