@@ -44,6 +44,8 @@ public class Listeners implements Listener {
         Player target = (Player) e.getRightClicked();
 
         if(!player.hasPermission("leashplayers.use")) return;
+        //Gets if target is leashable
+        if(!target.hasPermission("leashplayers.leashable")) return;
 
         if(leashed.contains(target)) {
             leashed.remove(target);
