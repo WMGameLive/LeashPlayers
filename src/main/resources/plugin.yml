@@ -16,3 +16,6 @@ permissions:
   leashplayers.use:
     description: allow leash other player.
     default: op
+  leashplayers.leashable:
+    description: allow to be leashed.
+    default: not op
