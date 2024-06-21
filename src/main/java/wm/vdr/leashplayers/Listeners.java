@@ -69,7 +69,7 @@ public class Listeners implements Listener {
             zombie.setInvisible(true);
             zombie.setCollidable(false);
             zombie.setInvulnerable(true);
-            zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 255, false, false));
+            zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 255, false, false));
             zombie.setLeashHolder(player);
         });
 
