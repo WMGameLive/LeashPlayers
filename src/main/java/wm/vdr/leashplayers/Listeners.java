@@ -1,5 +1,6 @@
 package wm.vdr.leashplayers;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -10,7 +11,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityUnleashEvent;
 import org.bukkit.event.entity.EntityUnleashEvent.UnleashReason;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -86,20 +86,25 @@ public class Listeners implements Listener {
                     leashed.remove(target);
                     entityList.remove(entity);
                     entity.remove();
-                    target.setAllowFlight(false);
+
+                    boolean reAllowFlight = target.getGameMode().equals(GameMode.CREATIVE);
+                    target.setAllowFlight(reAllowFlight);  // Fixes an error when leashing someone in creative mode.
+
                     if(!distanceUnleash.contains(entity))
                         target.getWorld().dropItemNaturally(target.getLocation(), new ItemStack(Material.LEAD));
                     else
                         distanceUnleash.remove(entity);
                     cancel();
                 }
-                Location location = target.getLocation();
-                location.setX(entity.getLocation().getX());
-                location.setY(entity.getLocation().getY());
-                location.setZ(entity.getLocation().getZ());
-                target.teleport(location, PlayerTeleportEvent.TeleportCause.UNKNOWN);
+
+                Location playerLocation = target.getLocation();
+                Location entityLocation = entity.getLocation();
+                Location difference = entityLocation.subtract(playerLocation);
+
+                if (playerLocation.distance(entityLocation) > 1.5)  // Allows some movement of the target player. Makes things smoother.
+                    target.setVelocity(difference.toVector());
             }
-        }.runTaskTimer(main,0,main.getConfig().getInt("Leashed-Check-Delay"));
+        }.runTaskTimer(main,0, 1L + main.getConfig().getInt("Leashed-Check-Delay"));  // Added a 1 tick delay to help with timings.
     }
 
     @EventHandler
