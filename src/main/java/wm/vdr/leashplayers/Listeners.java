@@ -1,5 +1,6 @@
 package wm.vdr.leashplayers;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -68,6 +69,7 @@ public class Listeners implements Listener {
             zombie.setSilent(true);
             zombie.setInvisible(true);
             zombie.setCollidable(false);
+            zombie.getCollidableExemptions().clear();  // Make sure NO ONE can collide.
             zombie.setInvulnerable(true);
             zombie.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, Integer.MAX_VALUE, 255, false, false));
             zombie.setLeashHolder(player);
@@ -86,18 +88,26 @@ public class Listeners implements Listener {
                     leashed.remove(target);
                     entityList.remove(entity);
                     entity.remove();
-                    target.setAllowFlight(false);
+
+                    boolean allowFlight = target.getGameMode().equals(GameMode.CREATIVE);  // Fixes an error when leashed in creative mode.
+                    target.setAllowFlight(allowFlight);
                     if(!distanceUnleash.contains(entity))
                         target.getWorld().dropItemNaturally(target.getLocation(), new ItemStack(Material.LEAD));
                     else
                         distanceUnleash.remove(entity);
                     cancel();
                 }
-                Location location = target.getLocation();
-                location.setX(entity.getLocation().getX());
-                location.setY(entity.getLocation().getY());
-                location.setZ(entity.getLocation().getZ());
-                target.teleport(location, PlayerTeleportEvent.TeleportCause.UNKNOWN);
+
+                Location leashedPlayerLocation = target.getLocation();
+                Location zombieLocation = entity.getLocation();
+
+                if (leashedPlayerLocation.distanceSquared(zombieLocation) == 0) return;
+
+                leashedPlayerLocation.setX(zombieLocation.getX());
+                leashedPlayerLocation.setY(zombieLocation.getY());
+                leashedPlayerLocation.setZ(zombieLocation.getZ());
+
+                target.teleport(leashedPlayerLocation, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
         }.runTaskTimer(main,0,main.getConfig().getInt("Leashed-Check-Delay"));
     }
