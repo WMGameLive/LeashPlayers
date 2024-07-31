@@ -1,3 +1,9 @@
 #default value is 0(tick)
 #If you think it will lag the server, increase the value.
 Leashed-Check-Delay: 0
+# default value is 4.0 blocks
+# determines the distance at which the leashed player will start to get pulled
+Min-Pull-Distance: 4.0
+# default value is 8.0 blocks
+# determines the distance at which the leash will break from being too far
+Max-Leash-Distance: 8.0
